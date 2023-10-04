@@ -10,8 +10,8 @@ const { getUser, getUserId, getUserDelete, getUserPost, getUserPut} = require('.
 async function main() {
 
     try {
-        await mongoose.connect("mongodb://localhost:27017/newsline");
-        app.listen(3000);
+        await mongoose.connect("mongodb://localhost:27017/newsline");//URL Базы данных
+        app.listen(3000);//Порт 3000
         console.log("Сервер ожидает подключения...");
     }
     catch (err) {
@@ -42,19 +42,19 @@ app.use((req, res, next) => {
 
     next();
 });
-
+//Поиск всех пользователей
 app.get("/api/users", getUser);
-
+//Поиск пользователя по уникальному идентификатору
 app.get("/api/users/:id", getUserId);
-
+//Добавление пользователя, кодируем пароль при помощи bcrypt, получаем JWT токен
 app.post("/api/users", jsonParser, getUserPost);
-
+//Удаление пользователя
 app.delete("/api/users/:id", getUserDelete);
-
+//Изменение пользователя
 app.put("/api/users", jsonParser, getUserPut);
 
 main();
-
+//Прослушиваем прерывание работы программы (ctrl-c)
 process.on("SIGINT", async () => {
 
     await mongoose.disconnect();
