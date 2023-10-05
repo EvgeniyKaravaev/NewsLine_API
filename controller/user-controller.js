@@ -55,7 +55,11 @@ const getUserPost = async (req, res) => {
 
 const getUserPut = async (req, res) => {
 
-    if (!req.body) return res.sendStatus(400);
+    encryptedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const { first_name, last_name, email, password } = req.body;
+    
+    if (!(email && password && first_name && last_name)) return res.status(400);
 
     const id = req.body.id;
 
@@ -65,11 +69,15 @@ const getUserPut = async (req, res) => {
 
     const userEmail = req.body.email;
 
-    const userPassword = req.body.password;
+    const userPassword = encryptedPassword;
 
-    const newUser = new News({ first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword });
+    const user = { first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword };
     
-    await News.findOneAndUpdate({ _id: id }, newUser, { new: true })
+    const token = jwt.sign({ id: user.id }, tokenKey);
+        
+    user.token = token;
+
+    await News.findOneAndUpdate({ id: user.id }, user, { new: true })
     .then((result) => { res.status(200).json(result); })
     .catch(() => {res.status(400).json({ message: 'Ошибка изменения объекта!' })});
 }
