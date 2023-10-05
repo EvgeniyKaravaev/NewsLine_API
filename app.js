@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const MONGO_DB = "mongodb://localhost:27017/newsline";
 
 const News = require('./model/user-model');
-const { getUser, getUserId, getUserDelete, getUserPost, getUserPut} = require('./controller/user-controller');
+const { getUser, getUserId, getUserDelete, getUserPost, getUserPut } = require('./controller/user-controller');
 
 async function main() {
 
@@ -60,8 +60,8 @@ main();
 process.on("SIGINT", async () => {
 
     await mongoose.disconnect();
-    
+
     console.log("Приложение завершило работу");
-    
+
     process.exit();
 });
