@@ -61,8 +61,6 @@ const getUserPut = async (req, res) => {
     
     if (!(email && password && first_name && last_name)) return res.status(400);
 
-    const id = req.body.id;
-
     const userFirstName = req.body.first_name;
 
     const userLastName = req.body.last_name;

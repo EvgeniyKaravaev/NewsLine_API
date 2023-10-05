@@ -4,13 +4,15 @@ const app = express();
 const jsonParser = express.json();
 const jwt = require('jsonwebtoken');
 
+const MONGO_DB = "mongodb://localhost:27017/newsline";
+
 const News = require('./model/user-model');
 const { getUser, getUserId, getUserDelete, getUserPost, getUserPut} = require('./controller/user-controller');
 
 async function main() {
 
     try {
-        await mongoose.connect("mongodb://localhost:27017/newsline");//URL Базы данных
+        await mongoose.connect(MONGO_DB);//URL Базы данных
         app.listen(3000);//Порт 3000
         console.log("Сервер ожидает подключения...");
     }
