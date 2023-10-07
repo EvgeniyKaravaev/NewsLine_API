@@ -4,15 +4,40 @@ const router = require('./routers/user-routers');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
+const News = require('./model/user-model');
+const jwt = require('jsonwebtoken');
+
 const MONGO_DB = "mongodb://localhost:27017/newsline";
 const PORT = 3000;
 
 const app = express();
 
-app.use(cors());
-app.use(cookieParser());
+app.use(express.json());
 app.use(router);
 app.use("/api", router);
+app.use((req, res, next) => {
+    if (req.headers.authorization) {
+        jwt.verify(
+            req.headers.authorization.split(' ')[1],
+            tokenKey,
+            (err, payload) => {
+                if (err) next();
+                else if (payload) {
+                    for (let user of News) {
+                        if (user.id === payload.id) {
+                            req.user = user;
+                            next();
+                        }
+                    }
+
+                    if (!req.user) next();
+                }
+            }
+        );
+    }
+
+    next();
+});
 
 async function main() {
 

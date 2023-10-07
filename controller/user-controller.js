@@ -10,9 +10,9 @@ const getUser = async (req, res) => {
         .catch((err) => { res.status(400).json({ message: err }) });
 }
 
-const getUserEmail = async (req, res) => {
-    const email = req.params.email;
-    await News.findOne(email).then((news) => { res.status(200).json(news); })
+const getUserId = async (req, res) => {
+    const id = req.params.id;
+    await News.findById(id).then((news) => { res.status(200).json(news); })
         .catch(() => { res.status(400).json({ message: 'Проверьте корректность уникального идентификатора - ID' }) });
 }
 
@@ -81,4 +81,4 @@ const getUserPut = async (req, res) => {
         .catch(() => { res.status(400).json({ message: 'Ошибка изменения объекта!' }) });
 }
 
-module.exports = { getUser, getUserEmail, getUserDelete, getUserPost, getUserPut };
+module.exports = { getUser, getUserId, getUserDelete, getUserPost, getUserPut };
