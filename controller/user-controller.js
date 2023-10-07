@@ -27,23 +27,23 @@ const getUserPost = async (req, res) => {
 
     try {
 
-        encryptedPassword = await bcrypt.hash(req.body.password, 10);
-
         const { first_name, last_name, email, password } = req.body;
+
+        encryptedPassword = await bcrypt.hash(password, 10);
 
         if (!(email && password && first_name && last_name)) return res.status(400);
 
-        const userFirstName = req.body.first_name;
+        const userFirstName = first_name;
 
-        const userLastName = req.body.last_name;
+        const userLastName = last_name;
 
-        const userEmail = req.body.email;
+        const userEmail = email;
 
         const userPassword = encryptedPassword;
 
         const user = new News({ first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword });
 
-        const token = jwt.sign({ id: user.id }, tokenKey, {expiresIn: '2h'});
+        const token = jwt.sign({ id: user.id }, tokenKey, { expiresIn: '2h' });
 
         user.token = token;
 
@@ -56,23 +56,23 @@ const getUserPost = async (req, res) => {
 
 const getUserPut = async (req, res) => {
 
-    encryptedPassword = await bcrypt.hash(req.body.password, 10);
-
     const { first_name, last_name, email, password } = req.body;
+
+    encryptedPassword = await bcrypt.hash(password, 10);
 
     if (!(email && password && first_name && last_name)) return res.status(400);
 
-    const userFirstName = req.body.first_name;
+    const userFirstName = first_name;
 
-    const userLastName = req.body.last_name;
+    const userLastName = last_name;
 
-    const userEmail = req.body.email;
+    const userEmail = email;
 
     const userPassword = encryptedPassword;
 
     const user = { first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword };
 
-    const token = jwt.sign({ id: user.id }, tokenKey, {expiresIn: '2h'});
+    const token = jwt.sign({ id: user.id }, tokenKey, { expiresIn: '2h' });
 
     user.token = token;
 
