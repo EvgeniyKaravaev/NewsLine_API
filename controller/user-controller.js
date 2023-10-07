@@ -54,6 +54,30 @@ const getUserPost = async (req, res) => {
     }
 }
 
+const UserPost = async (req, res, next) => {
+    if (req.headers.authorization) {
+        jwt.verify(
+            req.headers.authorization.split(' ')[1],
+            tokenKey,
+            (err, payload) => {
+                if (err) next();
+                else if (payload) {
+                    for (let user of News) {
+                        if (user.id === payload.id) {
+                            req.user = user;
+                            next();
+                        }
+                    }
+
+                    if (!req.user) next();
+                }
+            }
+        );
+    }
+
+    next();
+}
+
 const getUserPut = async (req, res) => {
 
     encryptedPassword = await bcrypt.hash(req.body.password, 10);
@@ -81,4 +105,4 @@ const getUserPut = async (req, res) => {
         .catch(() => { res.status(400).json({ message: 'Ошибка изменения объекта!' }) });
 }
 
-module.exports = { getUser, getUserEmail, getUserDelete, getUserPost, getUserPut };
+module.exports = { getUser, getUserEmail, getUserDelete, getUserPost, getUserPut, UserPost };
