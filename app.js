@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(router);
 app.post("/welcome", auth, (req, res) => {
     res.status(200).send("Welcome 🙌 ");
-  });
+});
 app.use("/api", router);
 
 async function main() {
