@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const app = express();
 const jwt = require('jsonwebtoken');
 
 const router = require('./routers/user-routers');
@@ -9,8 +8,8 @@ const News = require('./model/user-model');
 const MONGO_DB = "mongodb://localhost:27017/newsline";
 const PORT = 3000;
 
+const app = express();
 app.use(router);
-
 app.use("/users", router);
 
 async function main() {
