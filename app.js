@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const jwt = require('jsonwebtoken');
-
 const router = require('./routers/user-routers');
+require('dotenv').config;
+
 const News = require('./model/user-model');
 
 const MONGO_DB = "mongodb://localhost:27017/newsline";
-const PORT = 3000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 app.use(router);
