@@ -2,7 +2,7 @@ const News = require('../model/user-model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const tokenKey = '1a2b-3c4d-5e6f-7g8h';
+const tokenKey = '1aaf-124d-54hd-fing';
 
 const getUser = async (req, res) => {
 
@@ -10,9 +10,9 @@ const getUser = async (req, res) => {
         .catch((err) => { res.status(400).json({ message: err }) });
 }
 
-const getUserId = async (req, res) => {
-    const id = req.params.id;
-    await News.findById(id).then((news) => { res.status(200).json(news); })
+const getUserEmail = async (req, res) => {
+    const email = req.params.email;
+    await News.findOne(email).then((news) => { res.status(200).json(news); })
         .catch(() => { res.status(400).json({ message: 'Проверьте корректность уникального идентификатора - ID' }) });
 }
 
@@ -43,7 +43,7 @@ const getUserPost = async (req, res) => {
 
         const user = new News({ first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword });
 
-        const token = jwt.sign({ id: user.id }, tokenKey);
+        const token = jwt.sign({ id: user.id }, tokenKey, {expiresIn: '2h'});
 
         user.token = token;
 
@@ -72,7 +72,7 @@ const getUserPut = async (req, res) => {
 
     const user = { first_name: userFirstName, last_name: userLastName, email: userEmail, password: userPassword };
 
-    const token = jwt.sign({ id: user.id }, tokenKey);
+    const token = jwt.sign({ id: user.id }, tokenKey, {expiresIn: '2h'});
 
     user.token = token;
 
@@ -81,4 +81,4 @@ const getUserPut = async (req, res) => {
         .catch(() => { res.status(400).json({ message: 'Ошибка изменения объекта!' }) });
 }
 
-module.exports = { getUser, getUserId, getUserDelete, getUserPost, getUserPut };
+module.exports = { getUser, getUserEmail, getUserDelete, getUserPost, getUserPut };
