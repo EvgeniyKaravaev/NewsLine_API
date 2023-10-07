@@ -3,7 +3,7 @@ const express = require("express");
 const router = require('./routers/user-routers');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const auth = require("./auth");
+const auth = require("./middleware/auth");
 
 const MONGO_DB = "mongodb://localhost:27017/newsline";
 const PORT = 3000;
