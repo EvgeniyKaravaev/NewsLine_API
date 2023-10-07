@@ -12,13 +12,6 @@ const PORT = 3000;
 app.use(router);
 
 app.use("/users", router);
- 
-app.get("/about", function (request, response) {
-    response.send("О сайте");
-});
-app.get("/", function (request, response) {
-    response.send("Главная страница");
-});
 
 async function main() {
 
