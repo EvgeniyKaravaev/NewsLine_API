@@ -10,10 +10,11 @@ const PORT = 3000;
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(router);
 app.post("/welcome", auth, (req, res) => {
-    res.status(200).send("Welcome 🙌 ");
+    res.status(200).send("Welcome");
 });
 app.use("/api", router);
 
