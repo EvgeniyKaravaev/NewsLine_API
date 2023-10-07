@@ -1,19 +1,30 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const jsonParser = express.json();
 const jwt = require('jsonwebtoken');
 
-const MONGO_DB = "mongodb://localhost:27017/newsline";
-
+const router = require('./routers/user-routers');
 const News = require('./model/user-model');
-const { getUser, getUserId, getUserDelete, getUserPost, getUserPut } = require('./controller/user-controller');
+
+const MONGO_DB = "mongodb://localhost:27017/newsline";
+const PORT = 3000;
+
+app.use(router);
+
+app.use("/users", router);
+ 
+app.get("/about", function (request, response) {
+    response.send("О сайте");
+});
+app.get("/", function (request, response) {
+    response.send("Главная страница");
+});
 
 async function main() {
 
     try {
         await mongoose.connect(MONGO_DB);//URL Базы данных
-        app.listen(3000);//Порт 3000
+        app.listen(PORT);//Порт
         console.log("Сервер ожидает подключения...");
     }
     catch (err) {
@@ -44,16 +55,6 @@ app.use((req, res, next) => {
 
     next();
 });
-//Поиск всех пользователей
-app.get("/api/users", getUser);
-//Поиск пользователя по уникальному идентификатору
-app.get("/api/users/:id", getUserId);
-//Добавление пользователя, кодируем пароль при помощи bcrypt, получаем JWT токен
-app.post("/api/users", jsonParser, getUserPost);
-//Удаление пользователя
-app.delete("/api/users/:id", getUserDelete);
-//Изменение пользователя
-app.put("/api/users", jsonParser, getUserPut);
 
 main();
 //Прослушиваем прерывание работы программы (ctrl-c)
