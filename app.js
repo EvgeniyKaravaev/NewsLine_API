@@ -10,7 +10,7 @@ const PORT = 3000;
 
 const app = express();
 app.use(router);
-app.use("/users", router);
+app.use("/api", router);
 
 async function main() {
 
