@@ -81,4 +81,34 @@ const getUserPut = async (req, res) => {
         .catch(() => { res.status(400).json({ message: 'Ошибка изменения объекта!' }) });
 }
 
-module.exports = { getUser, getUserId, getUserDelete, getUserPost, getUserPut };
+const getLoginPost = async (req, res) => {
+
+    try {
+      const { email, password } = req.body;
+  
+      if (!(email && password)) {
+        res.status(400).send("Вы ввели не все данные");
+      }
+      const user = await News.findOne({ email });
+  
+      if (user && (await bcrypt.compare(password, user.password))) {
+        
+        const token = jwt.sign(
+          { id: user.id, email },
+          tokenKey,
+          {
+            expiresIn: "2h",
+          }
+        );
+  
+        user.token = token;
+  
+        res.status(200).json(user);
+      }
+      res.status(400).send("Неверные учетные данные");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+module.exports = { getUser, getUserId, getUserDelete, getUserPost, getUserPut, getLoginPost };

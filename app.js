@@ -3,9 +3,7 @@ const express = require("express");
 const router = require('./routers/user-routers');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
-const News = require('./model/user-model');
-const jwt = require('jsonwebtoken');
+const auth = require("./auth");
 
 const MONGO_DB = "mongodb://localhost:27017/newsline";
 const PORT = 3000;
@@ -14,30 +12,10 @@ const app = express();
 
 app.use(express.json());
 app.use(router);
+app.post("/welcome", auth, (req, res) => {
+    res.status(200).send("Welcome 🙌 ");
+  });
 app.use("/api", router);
-app.use((req, res, next) => {
-    if (req.headers.authorization) {
-        jwt.verify(
-            req.headers.authorization.split(' ')[1],
-            tokenKey,
-            (err, payload) => {
-                if (err) next();
-                else if (payload) {
-                    for (let user of News) {
-                        if (user.id === payload.id) {
-                            req.user = user;
-                            next();
-                        }
-                    }
-
-                    if (!req.user) next();
-                }
-            }
-        );
-    }
-
-    next();
-});
 
 async function main() {
 
